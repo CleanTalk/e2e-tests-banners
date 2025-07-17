@@ -19,6 +19,7 @@ runs:
   steps:
     - run: python ${{ github.action_path }}/apbct_check_banners.py
       shell: bash
+      working-directory: ${{ github.action_path }}
       env:
         PHPUNIT_COMMAND: ${{ inputs.phpunit-command }}
         COVERAGE_FORMAT: ${{ inputs.coverage-format }}
