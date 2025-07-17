@@ -1,0 +1,25 @@
+name: 'CleanTalk Anti-Spam banners tests'
+author: 'CleanTalk Team'
+
+inputs:
+  auth_url:
+    required: false
+    default: 'http://localhost:8080/wp-admin/'
+    description: 'Admin login url'
+  auth_login:
+    required: false
+    default: 'admin'
+    description: 'Admin name'
+  auth_password:
+    required: false
+    default: 'password'
+    description: 'Admin pass'
+runs:
+  using: 'composite'
+  steps:
+    - run: python ${{ github.action_path }}/apbct_check_banners.py
+      shell: bash
+      env:
+        PHPUNIT_COMMAND: ${{ inputs.phpunit-command }}
+        COVERAGE_FORMAT: ${{ inputs.coverage-format }}
+        MIN_COVERAGE: ${{ inputs.min-coverage }}
