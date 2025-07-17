@@ -27,7 +27,7 @@ def check_banner_on_settings_page(banner_id, banner_text, driver_instance=None):
 def check_banner_on_main_page(banner_id, banner_text, driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
-    driver.find_element(By.XPATH, '//*[@id="menu-dashboard"]/a/div[3]').click()
+    driver.find_element(By.XPATH, '//*[@id="menu-dashboard"]/a/div[1]').click()
     time.sleep(3)
 
     try:
@@ -51,10 +51,10 @@ def close_banner_on_main_page(banner_id, driver_instance=None):
 
         if close_banner:
             close_banner.click()
-            
+
             time.sleep(3)
             driver.refresh()
-            time.sleep(3) 
+            time.sleep(3)
 
             try:
                 empty_banner_element = driver.find_element(By.ID, banner_id)
@@ -75,7 +75,7 @@ def close_banner_on_main_page(banner_id, driver_instance=None):
 def check_banner_on_main_page_not_exists(banner_id, driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
-    driver.find_element(By.XPATH, '//*[@id="menu-dashboard"]/a/div[3]').click()
+    driver.find_element(By.XPATH, '//*[@id="menu-dashboard"]/a/div[1]').click()
     time.sleep(3)
 
     try:
@@ -104,7 +104,7 @@ def check_other_banners_on_main_page(driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
     print("[LOG] Checking other banners on main page")
-    driver.find_element(By.XPATH, '//*[@id="menu-dashboard"]/a/div[3]').click()
+    driver.find_element(By.XPATH, '//*[@id="menu-dashboard"]/a/div[1]').click()
     time.sleep(3)
     driver.refresh()
     time.sleep(3)
