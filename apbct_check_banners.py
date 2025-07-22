@@ -3,7 +3,6 @@ from inc.banners_consts import *
 
 # tools
 from lib.tools import *
-from lib.helper import *
 
 # browser
 from lib.browser_init import browser_init
@@ -20,6 +19,7 @@ def __main__():
     driver = browser_init()
 
     auth_admin(driver)
+
     complete_deactivation(driver)
 
     #1

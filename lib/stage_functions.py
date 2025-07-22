@@ -4,11 +4,12 @@ from selenium.common.exceptions import NoSuchElementException
 from lib.tools import get_page_source
 from lib.browser_init import driver as browser_driver
 
+import config
 
 def check_banner_on_settings_page(banner_id, banner_text, driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
-    driver.get(settings_page)
+    driver.get(config.BANNERS_TESTS_SETTINGS_URL)
 
     try:
         element = driver.find_element(By.ID, banner_id)
@@ -88,7 +89,7 @@ def check_banner_on_main_page_not_exists(banner_id, driver_instance=None):
 
 def check_banner_on_settings_page_not_exists(banner_id, driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
-    driver.get(settings_page)
+    driver.get(config.BANNERS_TESTS_SETTINGS_URL)
 
     try:
         driver.find_element(By.ID, banner_id)
@@ -119,7 +120,7 @@ def check_other_banners_on_settings_page(driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
     print("[LOG] Checking other banners on settings page")
-    driver.get(settings_page)
+    driver.get(config.BANNERS_TESTS_SETTINGS_URL)
     time.sleep(3)
     driver.refresh()
     time.sleep(3)

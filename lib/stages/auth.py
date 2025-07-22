@@ -12,7 +12,7 @@ def auth_admin(driver_instance=None):
 
     driver.get(config.BANNERS_TESTS_URL + '/wp-login.php')
     locator = (By.ID, "wp-submit")
-    element = WebDriverWait(driver, 15).until(EC.visibility_of_element_located(locator))
+    element = WebDriverWait(driver, config.BANNERS_TESTS_REGULAR_TIMEOUT).until(EC.visibility_of_element_located(locator))
     user_login = driver.find_element(By.ID, 'user_login')
     user_login.send_keys(config.BANNERS_TESTS_AUTH_LOGIN)
 
