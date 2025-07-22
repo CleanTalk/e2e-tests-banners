@@ -1,5 +1,6 @@
 .idea
 inc/options.py
+.env
 
 inc/__pycache__
 lib/__pycache__

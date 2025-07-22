@@ -1,13 +1,12 @@
 from lib.browser_init import driver as browser_driver
-from inc.options import *
 from inc.banners_consts import *
 from lib.tools import *
 from lib.stage_functions import *
 
 
-def check_empty_key(driver_instance=None): 
+def check_empty_key(driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
-    
+
     print("---=== Test banner with empty key ===---")
     try:
         set_key('', driver)

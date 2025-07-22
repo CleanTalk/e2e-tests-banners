@@ -3,7 +3,6 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from lib.tools import get_page_source
 from lib.browser_init import driver as browser_driver
-from inc.options import settings_page
 
 
 def check_banner_on_settings_page(banner_id, banner_text, driver_instance=None):

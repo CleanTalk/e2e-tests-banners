@@ -4,17 +4,17 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
 
-from inc.options import *
 from lib.browser_init import driver as browser_driver
 
+import config
 
 # Set key
 def set_key(key = '', driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
-    if driver.current_url != settings_page:
+    if driver.current_url != config.BANNERS_TESTS_SETTINGS_URL:
         print("[LOG] Reload page")
-        driver.get(settings_page)
+        driver.get(config.BANNERS_TESTS_SETTINGS_URL)
 
     locator = (By.ID, "apbct_setting_apikey")
     WebDriverWait(driver, 15).until(EC.visibility_of_element_located(locator))
@@ -54,7 +54,7 @@ def complete_deactivation(driver_instance=None):
 
     try:
         print("[LOG] Set regular key")
-        set_key(regular_acc_key, driver)
+        set_key(config.BANNERS_TESTS_API_KEY_REGULAR, driver)
 
         print("[LOG] Set complete deactivation")
         align_center('ct_adv_showhide', driver)
@@ -63,7 +63,7 @@ def complete_deactivation(driver_instance=None):
         driver.find_element(By.ID, 'apbct_setting_misc__complete_deactivation').click()
         driver.find_element(By.CSS_SELECTOR, '#apbct_settings__button_section > button').click()
 
-        driver.get(plugins_page)
+        driver.get(config.BANNERS_TESTS_PLUGINS_URL)
         print("[LOG] Deactivate plugin")
         deactivation_button = driver.find_element(By.ID, 'deactivate-cleantalk-spam-protect')
         if deactivation_button:
@@ -80,7 +80,7 @@ def complete_deactivation(driver_instance=None):
             time.sleep(3)
 
         print("[LOG] Save regular key")
-        set_key(regular_acc_key, driver)
+        set_key(config.BANNERS_TESTS_API_KEY_REGULAR, driver)
     except Exception as e:
         print(f"[ERROR] {e}")
 

@@ -1,13 +1,12 @@
 from lib.browser_init import driver as browser_driver
 from lib.tools import *
-from inc.options import *
 from inc.banners_consts import *
 from lib.stage_functions import *
 
 # проверка триального ключа
-def check_trial_key_expired(driver_instance=None): 
+def check_trial_key_expired(driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
-    
+
     print("---=== Test banner with trial key ===---")
     set_key(trial_key_expired, driver)
 

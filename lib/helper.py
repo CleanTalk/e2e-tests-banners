@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 
 from inc.banners_consts import *
-from inc.options import *
 
 def helper():
     # Get current date
