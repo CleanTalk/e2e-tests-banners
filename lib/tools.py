@@ -93,7 +93,7 @@ def remove_dismissed_flags():
     print(config.BANNERS_TESTS_DB_PORT)
     try:
         db_config = {
-            'host': config.BANNERS_TESTS_DB_HOST,
+            'host': 'db',
             'database': config.BANNERS_TESTS_DB_NAME,
             'user': config.BANNERS_TESTS_DB_USER,
             'password': config.BANNERS_TESTS_DB_PASSWORD,
