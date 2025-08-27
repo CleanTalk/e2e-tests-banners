@@ -86,11 +86,6 @@ def ensure_plugin_activated(driver):
         raise Exception(f"Plugin activation failed: {e}. Is CleanTalk installed?")
 
 def remove_dismissed_flags():
-    print(config.BANNERS_TESTS_DB_HOST)
-    print(config.BANNERS_TESTS_DB_NAME)
-    print(config.BANNERS_TESTS_DB_USER)
-    print(config.BANNERS_TESTS_DB_PASSWORD)
-    print(config.BANNERS_TESTS_DB_PORT)
     try:
         db_config = {
             'host': config.BANNERS_TESTS_DB_HOST,
