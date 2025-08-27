@@ -3,6 +3,9 @@ import os
 
 load_dotenv()
 
+print('CHECK ENV')
+os.getenv('INPUT_DB_HOST')
+
 # Database settings
 BANNERS_TESTS_DB_HOST = os.getenv('INPUT_DB_HOST', 'localhost')
 BANNERS_TESTS_DB_NAME = os.getenv('BANNERS_TESTS_DB_NAME', 'wordpress')

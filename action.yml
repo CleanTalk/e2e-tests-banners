@@ -2,18 +2,6 @@ name: 'CleanTalk Anti-Spam banners tests'
 author: 'CleanTalk Team'
 
 inputs:
-  auth_url:
-    required: false
-    default: 'http://localhost:8080/wp-admin/'
-    description: 'Admin login url'
-  auth_login:
-    required: false
-    default: 'admin'
-    description: 'Admin name'
-  auth_password:
-    required: false
-    default: 'password'
-    description: 'Admin pass'
   DB_HOST:
     required: false
     default: 'localhost'
