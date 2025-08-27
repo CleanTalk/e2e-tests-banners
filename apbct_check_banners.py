@@ -20,7 +20,7 @@ def __main__():
 
     auth_admin(driver)
 
-    complete_deactivation(driver)
+    remove_dismissed_flags()
 
     #1
     check_empty_key(driver) # empty key
@@ -30,11 +30,9 @@ def __main__():
 
     #3
     check_trial_key_expired(driver) # trial key expired
-    complete_deactivation(driver)
 
     #4
     check_paid_expired(driver) # paid and expired key
-    complete_deactivation(driver)
 
     print("Check completed")
     driver.quit()
