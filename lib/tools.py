@@ -25,6 +25,7 @@ def set_key(key = '', driver_instance=None):
 
     if set_key_via_database(key):
         print("✅ Key set via database")
+        set_key_is_ok_via_database()
 
         driver.refresh()
         time.sleep(3)
@@ -162,6 +163,57 @@ def set_key_via_database(key_value):
             """
 
             cursor.execute(update_query, (updated_settings,))
+            connection.commit()
+
+            return True
+
+    except Error as e:
+        print(f"❌ Database error: {e}")
+        return False
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        return False
+    finally:
+        if connection:
+            connection.close()
+
+def set_key_is_ok_via_database():
+    try:
+        db_config = {
+            'host': config.BANNERS_TESTS_DB_HOST,
+            'database': config.BANNERS_TESTS_DB_NAME,
+            'user': config.BANNERS_TESTS_DB_USER,
+            'password': config.BANNERS_TESTS_DB_PASSWORD,
+            'port': int(config.BANNERS_TESTS_DB_PORT),
+            'charset': 'utf8mb4'
+        }
+
+        connection = MySQLdb.connect(**db_config)
+        with connection.cursor() as cursor:
+            select_query = """
+            SELECT option_value
+            FROM wp_options
+            WHERE option_name = 'cleantalk_data'
+            """
+
+            cursor.execute(select_query)
+            result = cursor.fetchone()
+
+            if not result:
+                print("❌ cleantalk_data not found in database")
+                return False
+
+            current_data = result[0]
+
+            updated_data = update_key_in_settings(current_data, 'key_is_ok', 1)
+
+            update_query = """
+            UPDATE wp_options
+            SET option_value = %s
+            WHERE option_name = 'cleantalk_data'
+            """
+
+            cursor.execute(update_query, (updated_data,))
             connection.commit()
 
             return True
