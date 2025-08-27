@@ -4,7 +4,7 @@ import os
 load_dotenv()
 
 print('CHECK ENV')
-os.getenv('INPUT_DB_HOST')
+print(os.getenv('INPUT_DB_HOST'))
 
 # Database settings
 BANNERS_TESTS_DB_HOST = os.getenv('INPUT_DB_HOST', 'localhost')
