@@ -14,6 +14,11 @@ def browser_init():
 
     if config.BANNERS_TESTS_HEADLESS == 'yes':
         options.headless = True
+        options.add_argument('--headless')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--window-size=1920,1080')
     if config.BANNERS_TESTS_JS_ON == 'no':
         options.set_preference("javascript.enabled", False)
     driver = webdriver.Firefox(options=options)
