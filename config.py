@@ -1,18 +1,10 @@
 from dotenv import load_dotenv
 import os
 
-print('CHECK ENV BEFORE')
-print(os.getenv('INPUT_DB_HOST'))
-print(os.getenv('DB_HOST'))
-
 load_dotenv()
 
-print('CHECK ENV AFTER')
-print(os.getenv('INPUT_DB_HOST'))
-print(os.getenv('DB_HOST'))
-
 # Database settings
-BANNERS_TESTS_DB_HOST = os.getenv('INPUT_DB_HOST', 'localhost')
+BANNERS_TESTS_DB_HOST = os.getenv('DB_HOST', 'localhost')
 BANNERS_TESTS_DB_NAME = os.getenv('BANNERS_TESTS_DB_NAME', 'wordpress')
 BANNERS_TESTS_DB_USER = os.getenv('BANNERS_TESTS_DB_USER', 'wordpress')
 BANNERS_TESTS_DB_PASSWORD = os.getenv('BANNERS_TESTS_DB_PASSWORD', 'password')
