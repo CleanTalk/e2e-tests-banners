@@ -3,8 +3,8 @@
 ### How to use
 
 1. clone repository
-2. rename file inc/options_example.py to inc/options.py
-3. fill actual data in inc/options.py file
+2. rename file `.env.example` to `.env`
+3. fill actual data in `.env` file
 4. run in console
 ```bash
 python apbct_check_banners.py

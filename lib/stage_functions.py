@@ -16,12 +16,13 @@ def check_banner_on_settings_page(banner_id, banner_text, driver_instance=None):
         print(f"[OK] Banner [{banner_id}] is on settings page")
         if banner_text in get_page_source(driver):
             print(f"[OK] Banner [{banner_id}] text is correct on settings page")
+            return 0
         else:
             print(f"[ALARM] Banner [{banner_id}] text is incorrect on settings page!!!")
-            return
+            return 1
     except NoSuchElementException:
         print(f"[ALARM] Banner [{banner_id}] is not on settings page!!!")
-        return
+        return 1
 
 
 def check_banner_on_main_page(banner_id, banner_text, driver_instance=None):
@@ -35,12 +36,13 @@ def check_banner_on_main_page(banner_id, banner_text, driver_instance=None):
         print(f"[OK] Banner [{banner_id}] is on main page")
         if banner_text in get_page_source(driver):
             print(f"[OK] Banner [{banner_id}] text is correct on main page")
+            return 0
         else:
             print(f"[ALARM] Banner [{banner_id}] text is incorrect on main page!!!")
-            return
+            return 1
     except NoSuchElementException:
         print(f"[ALARM] Banner [{banner_id}] is not on main page!!!")
-        return
+        return 1
 
 
 def close_banner_on_main_page(banner_id, driver_instance=None):
@@ -61,15 +63,17 @@ def close_banner_on_main_page(banner_id, driver_instance=None):
 
                 if empty_banner_element:
                     print(f"[ALARM] Banner [{banner_id}] is not closed!")
-                    return
+                    return 1
                 else:
                     print(f"[OK] Banner [{banner_id}] is not on main page")
+                    return 0
 
             except:
                 print(f"[OK] Banner [{banner_id}] is not on main page, all is OK!")
+                return 0
     except:
         print(f"[ALARM] Banner [{banner_id}] is not on main page, nothing to close!!!")
-        return
+        return 1
 
 
 def check_banner_on_main_page_not_exists(banner_id, driver_instance=None):
@@ -81,10 +85,10 @@ def check_banner_on_main_page_not_exists(banner_id, driver_instance=None):
     try:
         driver.find_element(By.ID, banner_id)
         print(f"[ALARM] Banner [{banner_id}] is on main page!!!")
-        return
+        return 1
     except NoSuchElementException:
         print(f"[OK] Banner [{banner_id}] is not on main page")
-        return
+        return 0
 
 
 def check_banner_on_settings_page_not_exists(banner_id, driver_instance=None):
@@ -94,10 +98,10 @@ def check_banner_on_settings_page_not_exists(banner_id, driver_instance=None):
     try:
         driver.find_element(By.ID, banner_id)
         print(f"[ALARM] Banner [{banner_id}] is on settings page!!!")
-        return
+        return 1
     except NoSuchElementException:
         print(f"[OK] Banner [{banner_id}] is not on settings page")
-        return
+        return 0
 
 
 def check_other_banners_on_main_page(driver_instance=None):
@@ -112,8 +116,10 @@ def check_other_banners_on_main_page(driver_instance=None):
     if ("apbct-notice" in get_page_source(driver) and
         '<h3>Help others to fight spam – leave your feedback!</h3>' not in get_page_source(driver)):
         print('[ALARM] There is an extra banner on main page')
+        return 1
     else:
         print('[OK] There are no extra banners on main page')
+        return 0
 
 
 def check_other_banners_on_settings_page(driver_instance=None):
@@ -128,5 +134,7 @@ def check_other_banners_on_settings_page(driver_instance=None):
     if ("apbct-notice" in get_page_source(driver) and
         '<h3>Help others to fight spam – leave your feedback!</h3>' not in get_page_source(driver)):
         print('[ALARM] There is an extra banner on settings page')
+        return 1
     else:
         print('[OK] There are no extra banners on settings page')
+        return 0
