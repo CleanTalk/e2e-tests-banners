@@ -5,8 +5,8 @@ banner_key_btn = '<a href="options-general.php?page=cleantalk" class="button" ta
 
 # review key
 banner_review = "cleantalk_notice_review"
-banner_review_text = "Help others to fight spam with Anti-Spam by CleanTalk – leave your feedback!"
-banner_review_btn = '<a href="https://wordpress.org/support/plugin/cleantalk-spam-protect/reviews/#new-post" class="button" target="_blank">Leave a review</a>'
+banner_review_text = "Share your positive experience — leave a rating on WordPress"
+banner_review_btn = '<a href="https://wordpress.org/support/plugin/cleantalk-spam-protect/reviews/?filter=5" target="_blank" rel="noopener noreferrer" class="apbct-banner-button apbct-banner-button-green">SHARE YOUR FEEDBACK</a>'
 
 # trial key expired
 banner_trial_key_expired = "cleantalk_notice_trial"
