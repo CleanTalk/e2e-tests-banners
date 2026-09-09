@@ -45,8 +45,14 @@ def __main__():
     check_paid_expired_result = check_paid_expired(driver) # paid and expired key
     remove_dismissed_flags()
 
-    print("Check completed")
+    print("Check completed\n")
     driver.quit()
+
+    print("Check results:\n")
+    print("check_empty_key_result: {check_empty_key_result}\n")
+    print("check_review_key_result: {check_review_key_result}\n")
+    print("check_trial_key_expired_result: {check_trial_key_expired_result}\n")
+    print("check_paid_expired_result: {check_paid_expired_result}\n")
 
     return(
         check_empty_key_result or
