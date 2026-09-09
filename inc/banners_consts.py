@@ -1,20 +1,21 @@
 # empty key
-banner_key_empty = "cleantalk_notice_key_is_incorrect"
-banner_key_empty_text = "Please enter the Access Key in Anti-Spam by CleanTalk plugin to enable spam protection!"
-banner_key_btn = '<a href="options-general.php?page=cleantalk" class="button" target="_blank">Settings</a>'
+banner_key_empty = "spbc_empty_key"
+banner_key_empty_text = "Please enter the Access Key in Security by CleanTalk plugin to enable security features!"
+banner_key_btn = '<a href="options-general.php?page=spbc&amp;spbc_tab=settings_general" class="button" target="_blank" id="spbc_button_notice">Settings</a>'
 
 # review key
-banner_review = "cleantalk_notice_review"
+banner_review = "spbc_review"
 banner_review_text = "Share your positive experience — leave a rating on WordPress"
-banner_review_btn = '<a href="https://wordpress.org/support/plugin/cleantalk-spam-protect/reviews/?filter=5" target="_blank" rel="noopener noreferrer" class="apbct-banner-button apbct-banner-button-green">SHARE YOUR FEEDBACK</a>'
+banner_review_btn = '<a href="https://wordpress.org/support/plugin/security-malware-firewall/reviews/?filter=5" target="_blank" class="spbc-banner-button spbc-banner-button-green">SHARE YOUR FEEDBACK</a>'
 
 # trial key expired
-banner_trial_key_expired = "cleantalk_notice_trial"
-banner_trial_key_expired_text = "Anti-Spam by CleanTalk trial period ends, please upgrade to next year!"
+banner_trial_key_expired = "spbc_trial"
+banner_trial_key_expired_text_on_settings_page = "Upgrade Your License to Keep Your Site Secure"
+banner_trial_key_expired_text_on_main_page = "Please upgrade your license to keep your site secure and protected!"
 banner_trial_key_expired_btn = ''
 
 # paid and expired key
-banner_paid_expired = "cleantalk_notice_renew"
-banner_paid_expired_text = "Please renew your Anti-Spam license for next year!"
+banner_paid_expired = "spbc_trial"
+banner_paid_expired_text = "Please upgrade your license to keep your site secure and protected!"
 banner_paid_expired_btn = ''
 

@@ -17,7 +17,7 @@ BANNERS_TESTS_REGULAR_TIMEOUT = os.getenv('BANNERS_TESTS_REGULAR_TIMEOUT', 10)
 BANNERS_TESTS_URL = os.getenv('BANNERS_TESTS_URL', 'http://localhost:8080')
 BANNERS_TESTS_AUTH_LOGIN = os.getenv('BANNERS_TESTS_AUTH_LOGIN', 'admin')
 BANNERS_TESTS_AUTH_PASS = os.getenv('BANNERS_TESTS_AUTH_PASS', 'password')
-BANNERS_TESTS_SETTINGS_URL = BANNERS_TESTS_URL + '/wp-admin/options-general.php?page=cleantalk'
+BANNERS_TESTS_SETTINGS_URL = BANNERS_TESTS_URL + '/wp-admin/options-general.php?page=spbc&spbc_tab=settings_general'
 BANNERS_TESTS_PLUGINS_URL = BANNERS_TESTS_URL + '/wp-admin/plugins.php'
 
 BANNERS_TESTS_API_KEY_REGULAR = os.getenv('BANNERS_TESTS_API_KEY_REGULAR', '')

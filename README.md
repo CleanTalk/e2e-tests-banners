@@ -7,6 +7,6 @@
 3. fill actual data in `.env` file
 4. run in console
 ```bash
-python apbct_check_banners.py
+python spbct_check_banners.py
 ```
 5. see logs in console

@@ -12,7 +12,7 @@ def check_banner_on_settings_page(banner_id, banner_text, driver_instance=None):
     driver.get(config.BANNERS_TESTS_SETTINGS_URL)
 
     try:
-        element = driver.find_element(By.ID, banner_id)
+        element = driver.find_element(By.CSS_SELECTOR, f"[id^='{banner_id}_']")
         print(f"[OK] Banner [{banner_id}] is on settings page")
         if banner_text in get_page_source(driver):
             print(f"[OK] Banner [{banner_id}] text is correct on settings page")
@@ -32,7 +32,7 @@ def check_banner_on_main_page(banner_id, banner_text, driver_instance=None):
     time.sleep(3)
 
     try:
-        element = driver.find_element(By.ID, banner_id)
+        element = driver.find_element(By.CSS_SELECTOR, f"[id^='{banner_id}_']")
         print(f"[OK] Banner [{banner_id}] is on main page")
         if banner_text in get_page_source(driver):
             print(f"[OK] Banner [{banner_id}] text is correct on main page")
@@ -49,7 +49,7 @@ def close_banner_on_main_page(banner_id, driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
     try:
         print("[LOG] Closing banner on main page")
-        close_banner = driver.find_element(By.CSS_SELECTOR, f'#{banner_id} > button')
+        close_banner = driver.find_element(By.CSS_SELECTOR, f"[id^='{banner_id}_'] > button")
 
         if close_banner:
             close_banner.click()
@@ -59,7 +59,7 @@ def close_banner_on_main_page(banner_id, driver_instance=None):
             time.sleep(3)
 
             try:
-                empty_banner_element = driver.find_element(By.ID, banner_id)
+                empty_banner_element = driver.find_element(By.CSS_SELECTOR, f"[id^='{banner_id}_']")
 
                 if empty_banner_element:
                     print(f"[ALARM] Banner [{banner_id}] is not closed!")
@@ -83,7 +83,7 @@ def check_banner_on_main_page_not_exists(banner_id, driver_instance=None):
     time.sleep(3)
 
     try:
-        driver.find_element(By.ID, banner_id)
+        driver.find_element(By.CSS_SELECTOR, f"[id^='{banner_id}_']")
         print(f"[ALARM] Banner [{banner_id}] is on main page!!!")
         return 1
     except NoSuchElementException:

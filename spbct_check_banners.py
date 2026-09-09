@@ -22,17 +22,28 @@ def __main__():
 
     remove_dismissed_flags()
 
+    set_notice_via_database('notice_show', 0)
+    set_notice_via_database('notice_review', 0)
+    set_notice_via_database('notice_trial', 0)
+    set_notice_via_database('notice_renew', 0)
+
     #1
     check_empty_key_result = check_empty_key(driver) # empty key
+    remove_dismissed_flags()
+
+    set_key(config.BANNERS_TESTS_API_KEY_REGULAR, driver)
 
     #2
     check_review_key_result = check_review_key(driver) # review key
+    remove_dismissed_flags()
 
     #3
     check_trial_key_expired_result = check_trial_key_expired(driver) # trial key expired
+    remove_dismissed_flags()
 
     #4
     check_paid_expired_result = check_paid_expired(driver) # paid and expired key
+    remove_dismissed_flags()
 
     print("Check completed")
     driver.quit()

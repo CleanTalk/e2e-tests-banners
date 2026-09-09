@@ -9,7 +9,8 @@ def check_review_key(driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
     print("---=== Test banner with review ===---")
-    set_key(config.BANNERS_TESTS_API_KEY_REVIEW, driver)
+    set_notice_via_database('notice_show', 1)
+    set_notice_via_database('notice_review', 1)
 
     check_banner_on_settings_page_res = check_banner_on_settings_page(banner_review, banner_review_text, driver)
     check_banner_on_main_page_res = check_banner_on_main_page(banner_review, banner_review_text, driver)
@@ -19,6 +20,8 @@ def check_review_key(driver_instance=None):
     check_other_banners_on_main_page_res = check_other_banners_on_main_page(driver)
     check_other_banners_on_settings_page_res = check_other_banners_on_settings_page(driver)
 
+    set_notice_via_database('notice_show', 0)
+    set_notice_via_database('notice_review', 0)
     print("---=== Test banner with review completed ===---\n")
 
     return(

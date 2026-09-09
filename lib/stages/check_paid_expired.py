@@ -9,7 +9,8 @@ def check_paid_expired(driver_instance=None):
     driver = driver_instance if driver_instance is not None else browser_driver
 
     print("---=== Test banner with paid and expired key ===---")
-    set_key(config.BANNERS_TESTS_API_KEY_PAID_EXPIRED, driver)
+    set_notice_via_database('notice_show', 1)
+    set_notice_via_database('notice_renew', 1)
 
     check_banner_on_settings_page_res = check_banner_on_settings_page(banner_paid_expired, banner_paid_expired_text, driver)
     check_banner_on_main_page_res = check_banner_on_main_page(banner_paid_expired, banner_paid_expired_text, driver)
@@ -19,6 +20,8 @@ def check_paid_expired(driver_instance=None):
     check_other_banners_on_main_page_res = check_other_banners_on_main_page(driver)
     check_banner_on_settings_page_res = check_banner_on_settings_page(banner_paid_expired, banner_paid_expired_text, driver)
 
+    set_notice_via_database('notice_show', 0)
+    set_notice_via_database('notice_renew', 0)
     print("---=== Test banner with paid and expired key completed ===---\n")
 
     return(

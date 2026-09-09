@@ -29,14 +29,6 @@ def set_key(key = '', driver_instance=None):
 
         driver.refresh()
         time.sleep(3)
-
-        if key:
-            if wait_for_synchronization(driver):
-                print("✅ Key synchronization completed")
-                return True
-            else:
-                print("❌ Key synchronization failed")
-                return False
     else:
         print("❌ Failed to set key via database")
         return False
@@ -63,7 +55,7 @@ def ensure_plugin_activated(driver):
     try:
         # Locate CleanTalk plugin row by its data-slug attribute
         plugin_row = WebDriverWait(driver, config.BANNERS_TESTS_REGULAR_TIMEOUT).until(
-            EC.presence_of_element_located((By.XPATH, '//tr[contains(@data-slug, "cleantalk-spam-protect")]'))
+            EC.presence_of_element_located((By.XPATH, '//tr[contains(@data-slug, "security-malware-firewall")]'))
         )
 
         # Check if plugin is inactive
@@ -84,7 +76,7 @@ def ensure_plugin_activated(driver):
             print("[INFO] Plugin already active.")
 
     except Exception as e:
-        raise Exception(f"Plugin activation failed: {e}. Is CleanTalk installed?")
+        raise Exception(f"Plugin activation failed: {e}. Is SPBCT installed?")
 
 def remove_dismissed_flags():
     try:
@@ -99,20 +91,49 @@ def remove_dismissed_flags():
 
         connection = MySQLdb.connect(**db_config)
         with connection.cursor() as cursor:
+            select_query = """
+            SELECT option_value
+            FROM wp_options
+            WHERE option_name = 'spbc_data'
+            """
+
+            cursor.execute(select_query)
+            result = cursor.fetchone()
+
+            if not result:
+                print("❌ spbc_data not found in database")
+                return False
+
+            current_data = result[0]
+
+            updated_data = update_key_in_settings(current_data, 'dismissed_banners', [])
+
+            if current_data != updated_data:
+                print(f"✅ Data updated: dismissed_banners has been updated")
+            else:
+                print(f"ℹ️ No changes: dismissed_banners not modified")
+
+            update_query = """
+            UPDATE wp_options
+            SET option_value = %s
+            WHERE option_name = 'spbc_data'
+            """
+
+            cursor.execute(update_query, (updated_data,))
+            connection.commit()
+
             delete_query = """
             DELETE FROM wp_options
-            WHERE option_name LIKE 'cleantalk\\_%\\_dismissed'
-            OR option_name LIKE 'cleantalk%dismissed'
+            WHERE option_name LIKE 'spbc_empty_key\\_%'
+            OR option_name LIKE 'spbc_review\\_%'
+            OR option_name LIKE 'spbc_trial\\_%'
+            OR option_name LIKE 'spbc_renew\\_%'
             """
 
             cursor.execute(delete_query)
-            deleted_count = cursor.rowcount
             connection.commit()
 
-            if deleted_count > 0:
-                print(f"✅ Successfully removed {deleted_count} dismissed options")
-            else:
-                print("✅ No cleantalk_*_dismissed options found")
+            print(f"✅ Dismissed flags reset successfully!")
 
             return True
 
@@ -142,24 +163,24 @@ def set_key_via_database(key_value):
             select_query = """
             SELECT option_value
             FROM wp_options
-            WHERE option_name = 'cleantalk_settings'
+            WHERE option_name = 'spbc_settings'
             """
 
             cursor.execute(select_query)
             result = cursor.fetchone()
 
             if not result:
-                print("❌ cleantalk_settings not found in database")
+                print("❌ spbc_settings not found in database")
                 return False
 
             current_settings = result[0]
 
-            updated_settings = update_key_in_settings(current_settings, 'apikey', key_value)
+            updated_settings = update_key_in_settings(current_settings, 'spbc_key', key_value)
 
             update_query = """
             UPDATE wp_options
             SET option_value = %s
-            WHERE option_name = 'cleantalk_settings'
+            WHERE option_name = 'spbc_settings'
             """
 
             cursor.execute(update_query, (updated_settings,))
@@ -193,7 +214,7 @@ def set_key_is_ok_via_database():
             select_query = """
             SELECT option_value
             FROM wp_options
-            WHERE option_name = 'cleantalk_data'
+            WHERE option_name = 'spbc_data'
             """
 
             cursor.execute(select_query)
@@ -210,7 +231,58 @@ def set_key_is_ok_via_database():
             update_query = """
             UPDATE wp_options
             SET option_value = %s
-            WHERE option_name = 'cleantalk_data'
+            WHERE option_name = 'spbc_data'
+            """
+
+            cursor.execute(update_query, (updated_data,))
+            connection.commit()
+
+            return True
+
+    except Error as e:
+        print(f"❌ Database error: {e}")
+        return False
+    except Exception as e:
+        print(f"❌ Unexpected error: {e}")
+        return False
+    finally:
+        if connection:
+            connection.close()
+
+def set_notice_via_database(notice_name, notice_value):
+    try:
+        db_config = {
+            'host': config.BANNERS_TESTS_DB_HOST,
+            'database': config.BANNERS_TESTS_DB_NAME,
+            'user': config.BANNERS_TESTS_DB_USER,
+            'password': config.BANNERS_TESTS_DB_PASSWORD,
+            'port': int(config.BANNERS_TESTS_DB_PORT),
+            'charset': 'utf8mb4'
+        }
+
+        connection = MySQLdb.connect(**db_config)
+        with connection.cursor() as cursor:
+            select_query = """
+            SELECT option_value
+            FROM wp_options
+            WHERE option_name = 'spbc_data'
+            """
+
+            cursor.execute(select_query)
+            result = cursor.fetchone()
+
+            if not result:
+                print("❌ cleantalk_data not found in database")
+                return False
+
+            current_data = result[0]
+
+            updated_data = update_key_in_settings(current_data, notice_name, notice_value)
+
+            update_query = """
+            UPDATE wp_options
+            SET option_value = %s
+            WHERE option_name = 'spbc_data'
             """
 
             cursor.execute(update_query, (updated_data,))
@@ -230,19 +302,32 @@ def set_key_is_ok_via_database():
 
 def update_key_in_settings(settings_serialized, key, value):
     try:
-        settings_dict = phpserialize.loads(settings_serialized.encode('utf-8'), decode_strings=True)
+        def object_hook(obj, additional_arg=None):
+            if hasattr(obj, '__PHP_Incomplete_Class_Name'):
+                result = {}
+                for prop_key, prop_value in obj.items():
+                    if not prop_key.startswith('__PHP_Incomplete_Class'):
+                        clean_key = prop_key.split('\x00')[-1] if '\x00' in prop_key else prop_key
+                        result[clean_key] = prop_value
+                return result
+            return obj
+
+        settings_dict = phpserialize.loads(
+            settings_serialized.encode('utf-8'),
+            object_hook=object_hook,
+            decode_strings=True
+        )
 
         if isinstance(settings_dict, dict):
             settings_dict[key] = value
         else:
             return settings_serialized
 
-        updated_settings = phpserialize.dumps(settings_dict).decode('utf-8')
-
-        return updated_settings
+        return phpserialize.dumps(settings_dict).decode('utf-8')
 
     except Exception as e:
-        print(f"❌ Error processing settings with phpserialize: {e}")
+        print(f"❌ Error: {e}")
+        return settings_serialized
 
 def wait_for_synchronization(driver, timeout=60):
     print("⏳ Waiting for synchronization...")
@@ -250,7 +335,7 @@ def wait_for_synchronization(driver, timeout=60):
     start_time = time.time()
 
     try:
-        sync_button = driver.find_element(By.ID, 'apbct_button__sync')
+        sync_button = driver.find_element(By.ID, 'spbc_button__sync_regular')
 
         if sync_button.get_attribute('disabled'):
             print("⚠️ Sync button is disabled, cannot click")
@@ -263,7 +348,7 @@ def wait_for_synchronization(driver, timeout=60):
         print("⏳ Waiting for sync to start...")
         sync_start_time = time.time()
         while time.time() - sync_start_time < timeout:
-            sync_button = driver.find_element(By.ID, 'apbct_button__sync')
+            sync_button = driver.find_element(By.ID, 'spbc_button__sync_regular')
             if sync_button.get_attribute('disabled'):
                 print("🔄 Synchronization started")
                 break
@@ -274,7 +359,7 @@ def wait_for_synchronization(driver, timeout=60):
 
         print("⏳ Waiting for sync to complete...")
         while time.time() - start_time < timeout:
-            sync_button = driver.find_element(By.ID, 'apbct_button__sync')
+            sync_button = driver.find_element(By.ID, 'spbc_button__sync_regular')
 
             if not sync_button.get_attribute('disabled'):
                 print("✅ Synchronization completed successfully")
