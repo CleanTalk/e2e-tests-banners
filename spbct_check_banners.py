@@ -49,10 +49,10 @@ def __main__():
     driver.quit()
 
     print("Check results:\n")
-    print("check_empty_key_result: {check_empty_key_result}\n")
-    print("check_review_key_result: {check_review_key_result}\n")
-    print("check_trial_key_expired_result: {check_trial_key_expired_result}\n")
-    print("check_paid_expired_result: {check_paid_expired_result}\n")
+    print(f"check_empty_key_result: {check_empty_key_result}\n")
+    print(f"check_review_key_result: {check_review_key_result}\n")
+    print(f"check_trial_key_expired_result: {check_trial_key_expired_result}\n")
+    print(f"check_paid_expired_result: {check_paid_expired_result}\n")
 
     return(
         check_empty_key_result or
