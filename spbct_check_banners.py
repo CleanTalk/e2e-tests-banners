@@ -1,3 +1,5 @@
+import sys
+
 # constants
 from inc.banners_consts import *
 
