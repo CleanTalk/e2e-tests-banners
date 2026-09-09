@@ -1,3 +1,5 @@
+import sys
+
 # constants
 from inc.banners_consts import *
 
@@ -45,4 +47,4 @@ def __main__():
     )
 
 if __name__ == "__main__":
-    __main__()
+    sys.exit(__main__())
