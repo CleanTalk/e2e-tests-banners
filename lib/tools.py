@@ -304,6 +304,7 @@ def wait_for_synchronization(driver, timeout=60):
 
             if not sync_button.get_attribute('disabled'):
                 print("✅ Synchronization completed successfully")
+                wait_for_post_sync_reload(driver, sync_button)
                 return True
 
             time.sleep(2)
@@ -319,6 +320,75 @@ def wait_for_synchronization(driver, timeout=60):
         return False
 
     print("⏰ Synchronization timeout")
+    return False
+
+
+def wait_for_post_sync_reload(driver, sync_button, timeout=15):
+    """The plugin reloads settings when sync returns {reload: true}. Wait that out."""
+    print("⏳ Waiting for post-sync page reload...")
+    try:
+        WebDriverWait(driver, timeout).until(EC.staleness_of(sync_button))
+        print("✅ Settings page reloaded after sync")
+    except TimeoutException:
+        print("[LOG] No post-sync reload")
+        return
+    try:
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located((By.TAG_NAME, 'body'))
+        )
+    except TimeoutException:
+        pass
+
+
+def _flag_int(value):
+    if value is True:
+        return 1
+    if value is False:
+        return 0
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def get_data_flags_via_database(keys):
+    connection = None
+    try:
+        connection = _db_connect()
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "SELECT option_value FROM wp_options WHERE option_name = 'cleantalk_data'"
+            )
+            result = cursor.fetchone()
+        if not result:
+            return None
+        data = phpserialize.loads(result[0].encode('utf-8'), decode_strings=True)
+        if not isinstance(data, dict):
+            return None
+        return {key: _flag_int(data.get(key)) for key in keys}
+    except Exception as e:
+        print(f"❌ Failed to read data flags: {e}")
+        return None
+    finally:
+        try:
+            if connection:
+                connection.close()
+        except Exception:
+            pass
+
+
+def wait_until_data_flags(expected, timeout=30):
+    """Wait until cloud sync has written the expected notice flags to the DB."""
+    print(f"⏳ Waiting for cloud flags in DB: {expected}")
+    start_time = time.time()
+    last = None
+    while time.time() - start_time < timeout:
+        last = get_data_flags_via_database(expected.keys())
+        if last is not None and all(_flag_int(last.get(key)) == _flag_int(value) for key, value in expected.items()):
+            print(f"✅ Cloud flags in DB: {last}")
+            return True
+        time.sleep(1)
+    print(f"[ALARM] Timed out waiting for flags {expected}, last={last}")
     return False
 
 def mask_string(input_string):
@@ -345,7 +415,9 @@ def prepare_banner_stage(api_key, inject_flags, dummy_key, driver):
     remove_dismissed_flags()
 
     if is_usable_api_key(api_key):
-        return set_key(api_key, driver)
+        if not set_key(api_key, driver):
+            return False
+        return wait_until_data_flags(inject_flags)
 
     if config.BANNERS_TESTS_INJECT_NOTICES == 'yes':
         print(f"[LOG] No API key, injecting notices {inject_flags}")
