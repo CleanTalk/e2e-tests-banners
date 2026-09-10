@@ -10,6 +10,7 @@ def browser_init():
     options.set_preference("general.useragent.override", "CleanTalk Bot to check connection 1.0 (https://cleantalk.org/help/cleantalk-servers-ip-addresses)")
     options.set_preference("dom.webdriver.enabled", False)
     options.set_preference("useAutomationExtension", False)
+    options.set_preference("security.sandbox.content.level", 0)
     #options.add_argument('-private') # открывает в режиме инкогнито
 
     if config.BANNERS_TESTS_HEADLESS == 'yes':
@@ -25,25 +26,25 @@ def browser_init():
 
 
     if config.BANNERS_TESTS_HEADLESS == 'yes':
-        driver.set_window_size(2560, 1600) # для headless там делее все равно full screen
+        driver.set_window_size(2560, 1600)
     else:
-        # Calculate 80% of screen size
-        import tkinter as tk
-        root = tk.Tk()
-        screen_width = root.winfo_screenwidth()
-        screen_height = root.winfo_screenheight()
-        root.destroy()
+        try:
+            import tkinter as tk
+            root = tk.Tk()
+            screen_width = root.winfo_screenwidth()
+            screen_height = root.winfo_screenheight()
+            root.destroy()
+        except Exception:
+            screen_width = 1920
+            screen_height = 1080
 
         width = int(screen_width * 0.9)
         height = int(screen_height * 0.8)
-
-        # Position window at center of screen
         x_position = int((screen_width - width) / 2)
         y_position = int((screen_height - height) / 2)
 
         driver.set_window_size(width, height)
         driver.set_window_position(x_position, y_position)
-
         print(f"Window set to {width}x{height} (90% of screen size)")
 
     return driver

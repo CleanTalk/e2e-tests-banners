@@ -5,3 +5,8 @@ inc/options.py
 inc/__pycache__
 lib/__pycache__
 lib/stages/__pycache__
+**/__pycache__/
+.venv/
+docker-compose.local.yml
+Dockerfile.local
+geckodriver*.tar.gz

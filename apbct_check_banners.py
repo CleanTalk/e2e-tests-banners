@@ -18,6 +18,8 @@ from lib.stages.check_paid_expired import check_paid_expired
 
 def __main__():
 
+    skip_activation_redirect()
+
     driver = browser_init()
 
     auth_admin(driver)

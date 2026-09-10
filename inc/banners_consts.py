@@ -1,20 +1,20 @@
-# empty key
-banner_key_empty = "cleantalk_notice_key_is_incorrect"
+# empty key (AdminNotices::notice_key_is_empty → UniversalBanner type key_is_empty)
+banner_key_empty = "cleantalk_notice_key_is_empty"
 banner_key_empty_text = "Please enter the Access Key in Anti-Spam by CleanTalk plugin to enable spam protection!"
-banner_key_btn = '<a href="options-general.php?page=cleantalk" class="button" target="_blank">Settings</a>'
 
-# review key
+# review key (AdminBannerReview)
 banner_review = "cleantalk_notice_review"
 banner_review_text = "Share your positive experience — leave a rating on WordPress"
 banner_review_btn = '<a href="https://wordpress.org/support/plugin/cleantalk-spam-protect/reviews/?filter=5" target="_blank" rel="noopener noreferrer" class="apbct-banner-button apbct-banner-button-green">SHARE YOUR FEEDBACK</a>'
 
-# trial key expired
-banner_trial_key_expired = "cleantalk_notice_trial"
-banner_trial_key_expired_text = "Anti-Spam by CleanTalk trial period ends, please upgrade to next year!"
-banner_trial_key_expired_btn = ''
+# Trial and renew share AdminBannerTrialAndRenew on dashboard (id is always notice_trial).
+# Settings page shows AdminBannerTrialAndRenewFullpage instead of the form.
+banner_trial_dashboard = "cleantalk_notice_trial"
+banner_trial_dashboard_text = "Please upgrade your license to keep your site protected!"
+banner_trial_settings = "cleantalk_trial_fullpage"
+banner_trial_settings_text = "Upgrade Your License to Keep Your Site Secure"
 
-# paid and expired key
-banner_paid_expired = "cleantalk_notice_renew"
-banner_paid_expired_text = "Please renew your Anti-Spam license for next year!"
-banner_paid_expired_btn = ''
-
+banner_renew_dashboard = "cleantalk_notice_trial"
+banner_renew_dashboard_text = "Please upgrade your license to keep your site protected!"
+banner_renew_settings = "cleantalk_trial_fullpage"
+banner_renew_settings_text = "Renew Your License to Keep Your Site Secure"
