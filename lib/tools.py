@@ -26,7 +26,15 @@ def set_key(key='', driver_instance=None, skip_sync=False):
 
     if set_key_via_database(key):
         print("✅ Key set via database")
-        set_key_is_ok_via_database()
+        # Drop leftover trial/renew flags so the settings wrap (and Sync) stay visible.
+        # Sequential stages otherwise inherit the previous key's fullpage banner.
+        set_data_flags_via_database({
+            'key_is_ok': 1,
+            'notice_trial': 0,
+            'notice_renew': 0,
+            'notice_review': 0,
+            'notice_show': 0,
+        })
 
         driver.refresh()
         time.sleep(3)
@@ -263,7 +271,11 @@ def wait_for_synchronization(driver, timeout=60):
             return False
 
         print("🖱️ Clicking sync button...")
-        sync_button.click()
+        driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", sync_button)
+        try:
+            sync_button.click()
+        except Exception:
+            driver.execute_script("arguments[0].click();", sync_button)
         time.sleep(2)
 
         print("⏳ Waiting for sync to start...")

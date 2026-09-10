@@ -32,27 +32,31 @@ if [[ -z "$WP_ID" ]]; then
   exit 1
 fi
 
-if ! docker run --rm --volumes-from "$WP_ID" --network "container:$WP_ID" wordpress:cli wp core is-installed >/dev/null 2>&1; then
-  docker run --rm \
-    --volumes-from "$WP_ID" \
-    --network "container:$WP_ID" \
-    wordpress:cli wp core install \
-      --url="http://localhost:${WP_PORT:-8080}" \
-      --title="Banners e2e" \
-      --admin_user="admin" \
-      --admin_password="password" \
-      --admin_email="admin@example.com" \
-      --skip-email
+# wordpress:cli does not inherit WORDPRESS_DB_* from the WP container;
+# wp-config falls back to host `mysql` without these env vars.
+WP_CLI=(
+  docker run --rm
+  --volumes-from "$WP_ID"
+  --network "container:$WP_ID"
+  -e WORDPRESS_DB_HOST=db
+  -e WORDPRESS_DB_USER=wordpress
+  -e WORDPRESS_DB_PASSWORD=wordpress
+  -e WORDPRESS_DB_NAME=wordpress
+  wordpress:cli
+)
+
+if ! "${WP_CLI[@]}" wp core is-installed >/dev/null 2>&1; then
+  "${WP_CLI[@]}" wp core install \
+    --url="http://localhost:${WP_PORT:-8080}" \
+    --title="Banners e2e" \
+    --admin_user="admin" \
+    --admin_password="password" \
+    --admin_email="admin@example.com" \
+    --skip-email
 fi
 
-docker run --rm \
-  --volumes-from "$WP_ID" \
-  --network "container:$WP_ID" \
-  wordpress:cli wp plugin activate cleantalk-spam-protect
+"${WP_CLI[@]}" wp plugin activate cleantalk-spam-protect
 
-docker run --rm \
-  --volumes-from "$WP_ID" \
-  --network "container:$WP_ID" \
-  wordpress:cli wp option delete ct_plugin_do_activation_redirect >/dev/null 2>&1 || true
+"${WP_CLI[@]}" wp option delete ct_plugin_do_activation_redirect >/dev/null 2>&1 || true
 
 echo "WordPress is ready at http://localhost:${WP_PORT:-8080} (admin / password)"
